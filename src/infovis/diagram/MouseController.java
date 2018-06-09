@@ -10,14 +10,12 @@ import infovis.diagram.elements.Vertex;
 import infovis.diagram.layout.Fisheye;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MouseController implements MouseListener,MouseMotionListener {
+public class MouseController implements MouseListener,MouseMotionListener,MouseWheelListener {
 	 private Model model;
 	 private View view;
 	 private Element selectedElement = new None();
@@ -52,9 +50,9 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
-		
-		
-		
+
+
+
 		if (e.getButton() == MouseEvent.BUTTON3){
 			/*
 			 * add grouped elements to the model
@@ -96,6 +94,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	   if (edgeDrawMode){
 			drawingEdge = new DrawingEdge((Vertex)getElementContainingPosition(x/scale,y/scale));
 			model.addElement(drawingEdge);
+
 		} else if (fisheyeMode){
 			/*
 			 * do handle interactions in fisheye mode
@@ -220,6 +219,10 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		}
 		return currentElement;
 	}
-	
-    
+
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+
+	}
 }

@@ -41,13 +41,11 @@ public class Diagram {
 	}
 	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				GUI application = new GUI();
-				application.showToolbar(true);
-				application.setView(new Diagram().getView());
-				application.getJFrame().setVisible(true);
-			}
+		SwingUtilities.invokeLater(() -> {
+			GUI application = new GUI();
+			application.showToolbar(true);
+			application.setView(new Diagram().getView());
+			application.getJFrame().setVisible(true);
 		});
 	}
 	

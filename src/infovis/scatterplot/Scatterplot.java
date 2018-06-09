@@ -27,12 +27,10 @@ public class Scatterplot {
 	}
 	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				GUI application = new GUI();
-				application.setView(new Scatterplot().getView());
-				application.getJFrame().setVisible(true);
-			}
+		SwingUtilities.invokeLater(() -> {
+			GUI application = new GUI();
+			application.setView(new Scatterplot().getView());
+			application.getJFrame().setVisible(true);
 		});
 	}
 
