@@ -14,6 +14,7 @@ public class Diagram {
 	private MouseController controller = null;
     private Model model = null;
     private View view = null;
+	private MenuController menuController = null;
        
 	/**
 	 * @return View for GUI integration
@@ -28,7 +29,7 @@ public class Diagram {
 	   model.generateTestValues();
 	   view = new View();
 	   controller = new MouseController();
-	   MenuController menuController = MenuController.getMenuController();
+	   menuController = MenuController.getMenuController();
 	
 	   view.addMouseListener(controller);
 	   view.addMouseMotionListener(controller);

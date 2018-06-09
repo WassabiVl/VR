@@ -16,6 +16,8 @@ public class View extends JPanel{
     private double translateY=0;
     private Rectangle2D marker = new Rectangle2D.Double();
     private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,100,100);
+    private Graphics2D g2D;
+    private Graphics graphics;
 
     public Model getModel() {
         return model;
@@ -32,7 +34,8 @@ public class View extends JPanel{
 
 
     public void paint(Graphics g) {
-        Graphics2D g2D = (Graphics2D) g;
+        setGraphics(g);
+        g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
         paintDiagram(g2D);
@@ -79,5 +82,22 @@ public class View extends JPanel{
     }
     public boolean markerContains(int x, int y){
         return marker.contains(x, y);
+    }
+
+    public Graphics2D getGraphics2D() {
+        return g2D;
+    }
+
+    public void setGraphics2D(Graphics2D g2D) {
+        this.g2D = g2D;
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        return graphics;
+    }
+
+    public void setGraphics(Graphics graphics) {
+        this.graphics = graphics;
     }
 }

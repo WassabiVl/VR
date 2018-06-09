@@ -9,7 +9,7 @@ import infovis.diagram.elements.None;
 import infovis.diagram.elements.Vertex;
 import infovis.diagram.layout.Fisheye;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -226,7 +226,6 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 		int x = e.getScrollAmount();
 		int z = e.getWheelRotation();
 		double scale = view.getScale();
-        System.out.println(e);
         view.setScale(scale * x * z);
         view.repaint();
         System.out.println(view);
