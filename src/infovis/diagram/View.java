@@ -32,7 +32,6 @@ public class View extends JPanel{
 
 
     public void paint(Graphics g) {
-        MouseController mouseController = new MouseController();
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());

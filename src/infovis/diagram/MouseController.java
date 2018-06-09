@@ -67,7 +67,7 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 			/*
 			 * remove elements
 			 */
-			List<Edge> edgesToRemove = new ArrayList<Edge>();
+			List<Edge> edgesToRemove = new ArrayList<>();
 			for (Iterator<Edge> iter = model.iteratorEdges(); iter.hasNext();){
 				Edge edge = iter.next();
 				if (edge.getSource() == groupVertex || edge.getTarget() == groupVertex){
@@ -223,6 +223,13 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		int x = e.getScrollAmount();
+		int z = e.getWheelRotation();
+		double scale = view.getScale();
+        System.out.println(e);
+        view.setScale(scale * x * z);
+        view.repaint();
+        System.out.println(view);
 
 	}
 }

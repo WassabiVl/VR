@@ -32,6 +32,7 @@ public class Diagram {
 	
 	   view.addMouseListener(controller);
 	   view.addMouseMotionListener(controller);
+	   view.addMouseWheelListener(controller);
 	   view.setModel(model);
 	   controller.setModel(model);
 	   controller.setView(view);
