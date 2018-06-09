@@ -18,6 +18,7 @@ public class View extends JPanel{
     private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,100,100);
     private Graphics2D g2D;
     private Graphics graphics;
+    private MouseController mouseController = new MouseController();
 
     public Model getModel() {
         return model;

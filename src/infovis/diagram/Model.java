@@ -14,8 +14,8 @@ public class Model {
 	private List<Element> elements = new ArrayList<Element>();
 	private List<Vertex>  vertices  = new ArrayList<Vertex>();
 	private List<Edge>    edges = new ArrayList<Edge>();
-    
-   
+
+
 	public void addVertex(Vertex v){
 		vertices.add(v);
 		elements.add(v);
@@ -48,7 +48,7 @@ public class Model {
 		elements.add(label);
 	}
 	public void addElement(Element element) {
-		elements.add(element);	
+		elements.add(element);
 	}
 	public void removeElement(Element element){
 		elements.remove(element);
@@ -71,20 +71,20 @@ public class Model {
 		edges.removeAll(list);
 		elements.removeAll(list);
 	}
-	
+
 	public static int generateNewID(){
 		idCounter++;
 		return idCounter;
 	}
 	public void generateTestValues(){
 		addVertex(new Vertex(70,90));
-    	addVertex(new Vertex(270,290));
-    	addVertex(new Vertex(270,230));
-    	addVertex(new Vertex(210,290));
-    	addVertex(new Vertex(400,90));
-    	addVertex(new Vertex(400,690));
-    	addVertex(new Vertex(700,90));
-    	addVertex(new Vertex(700,490));
+		addVertex(new Vertex(270,290));
+		addVertex(new Vertex(270,230));
+		addVertex(new Vertex(210,290));
+		addVertex(new Vertex(400,90));
+		addVertex(new Vertex(400,690));
+		addVertex(new Vertex(700,90));
+		addVertex(new Vertex(700,490));
 	}
 	public boolean isEmpty(){
 		return elements.isEmpty();
@@ -97,9 +97,9 @@ public class Model {
 	public List<Vertex> getVertices() {
 		return vertices;
 	}
-	
+
 	public List<Element> getElements() {
 		return elements;
 	}
-	
+
 }
