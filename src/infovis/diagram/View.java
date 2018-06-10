@@ -48,7 +48,7 @@ public class View extends JPanel{
         Color color1 = Color.BLUE;
         g2D.setColor(color1);
         g2D.draw(overviewRect); //fills the
-        g2D.scale(.1,.1);
+        g2D.scale(.1*getScale(),.1*getScale());
         paintDiagram(g2D);
     }
 
