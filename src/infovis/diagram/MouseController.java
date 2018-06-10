@@ -226,9 +226,12 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int x = e.getScrollAmount();
         int z = e.getWheelRotation();
         double scale = view.getScale();
+        System.out.println(scale);
         view.setScale(scale * x * z);
         view.repaint();
-        System.out.println(view);
+//        Graphics g = view.getGraphics();
+//        view.paint(g);
+//        System.out.println(view);
 
     }
 }

@@ -32,13 +32,18 @@ public class View extends JPanel{
     public void setColor(Color color) {
         this.color = color;
     }
+    public void setGraphics(Graphics graphics) {
+        this.graphics = graphics;
+    }
 
 
+    @Override
     public void paint(Graphics g) {
         setGraphics(g);
         g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
+        g2D.scale(1*getScale(),1*getScale());
         paintDiagram(g2D);
         Color color1 = Color.BLUE;
         g2D.setColor(color1);
@@ -46,6 +51,8 @@ public class View extends JPanel{
         g2D.scale(.1,.1);
         paintDiagram(g2D);
     }
+
+
 
     private void paintDiagram(Graphics2D g2D){
         for (Element element: model.getElements()){
@@ -93,12 +100,4 @@ public class View extends JPanel{
         this.g2D = g2D;
     }
 
-    @Override
-    public Graphics getGraphics() {
-        return graphics;
-    }
-
-    public void setGraphics(Graphics graphics) {
-        this.graphics = graphics;
-    }
 }
