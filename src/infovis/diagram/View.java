@@ -15,7 +15,7 @@ public class View extends JPanel{
     private double translateX= 0;
     private double translateY=0;
     private Rectangle2D marker = new Rectangle2D.Double();
-    private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,100,100);
+    private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,1000,1000);
     private Graphics2D g2D;
     private Graphics graphics;
 
@@ -39,6 +39,9 @@ public class View extends JPanel{
 
     @Override
     public void paint(Graphics g) {
+        if (getScale()<=0) {
+            setScale(1);
+        }
         setGraphics(g);
         g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -47,9 +50,11 @@ public class View extends JPanel{
         paintDiagram(g2D);
         Color color1 = Color.BLUE;
         g2D.setColor(color1);
+        g2D.scale(.1/getScale(),.1/getScale());
         g2D.draw(overviewRect); //fills the
-        g2D.scale(.1*getScale(),.1*getScale());
         paintDiagram(g2D);
+        System.out.println(getScale());
+
     }
 
 
