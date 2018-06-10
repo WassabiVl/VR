@@ -228,9 +228,6 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         double scale = view.getScale();
         view.setScale(scale - (x * z)/3);
         view.repaint();
-//        Graphics g = view.getGraphics();
-//        view.paint(g);
-//        System.out.println(view);
 
     }
 }
