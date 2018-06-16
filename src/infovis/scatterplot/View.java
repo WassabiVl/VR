@@ -18,8 +18,9 @@ public class View extends JPanel {
 		 
 		@Override
 		public void paint(Graphics g) {
-
-	        for (String l : model.getLabels()) {
+            Graphics2D g2D = (Graphics2D) g;
+            super.paintComponent(g2D);
+            for (String l : model.getLabels()) {
 				Debug.print(l);
 				Debug.print(",  ");
 				Debug.println("");
@@ -30,8 +31,13 @@ public class View extends JPanel {
 				Debug.println("");
 			}
 			for (Data d : model.getList()) {
-				Debug.print(d.toString());
+				Debug.println(d.toString());
 				Debug.println("");
+                for (double a : d.getValues()){
+                    g2D.drawRect((int) a, (int)a, 1, 1);
+                    Debug.println(String.valueOf(a));
+
+                }
 			}
 	        
 			
