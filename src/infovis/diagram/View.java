@@ -35,6 +35,9 @@ public class View extends JPanel{
 
     @Override
     public void paint(Graphics g) {
+        Color color1 = Color.BLUE;
+        Color color2 = Color.RED;
+        Color color3 = new Color(0f,0f,0f,0f);
         
         /*
         * Homework 1.1
@@ -45,24 +48,28 @@ public class View extends JPanel{
         g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
-        g2D.scale(1*getScale(),1*getScale());
-        paintDiagram(g2D);
-        Color color1 = Color.BLUE;
-        Color color2 = Color.RED;
-        Color color3 = new Color(0f,0f,0f,0f);
-
-        /*
-        * Homework 1.2
+/*
+        * Homework 1.2 
         */
         g2D.scale(.1/getScale(),.1/getScale());
+        g2D.setColor(color2);
+        g2D.draw(marker);
+        
+        g2D.scale(1*getScale(),1*getScale());
         g2D.setColor(color1);
         g2D.draw(overviewRect);
         paintDiagram(g2D);
+        
 
-        g2D.setColor(color2);
-        g2D.draw(marker);
+        g2D.scale(1*getScale(),1*getScale());
+        // g2D.translate(getTranslateX(), getTranslateY());
+        paintDiagram(g2D);
+
+        
         // //paintDiagram(g2D);
         // System.out.println(getScale());
+        
+        
 
     }
 
@@ -96,20 +103,15 @@ public class View extends JPanel{
         setTranslateY(y);
     }
     public void updateMarker(int x, int y){
-        /**
-         * 	setRect(double x, double y, double width, double height)
-Sets the bounds of this Rectangle to the integer bounds which encompass the specified x, y, width, and height.
-         */
+        
         marker.setRect(x, y, 200, 200);
     }
+
     public Rectangle2D getMarker(){
         return marker;
     }
     public boolean markerContains(int x, int y){
-        /**
-         * contains(int x, int y)
-Checks whether or not this Rectangle contains the point at the specified location (x,y).
-         */
+        
         return marker.contains(x, y);
     }
 

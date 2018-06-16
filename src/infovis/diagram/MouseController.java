@@ -174,7 +174,10 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         /*
          * Homework 1.2
          */
-            moveSmallMarker(x,y, scale);
+        moveSmallMarker(x,y, scale);
+        view.setTranslateX((x) * -1);
+        view.setTranslateY((y) * -1);
+        view.repaint();
 
         if (fisheyeMode){
             /*
@@ -243,21 +246,37 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
     * Homework 1.2
     */
     public void moveSmallMarker(int x, int y, double scale) {
-        // System.out.println("Scale:  " + String.valueOf(scale));
-        //     System.out.println("Marker:  " + String.valueOf(view.getMarker()));
-        //     System.out.println("x:  " + String.valueOf(x) + " || possible x: " + String.valueOf(x*(10)));
-        //     System.out.println("y:  " + String.valueOf(y) + " || possible y: " + String.valueOf(y*(10)));
-            
-        int moveX = x * 10;
+        //Move like the mouse position but inverse to the scale
+        int moveX = x * 10;// times 10 because the red marker is only 10% of the actual size
         int moveY = y * 10;
-        view.updateMarker(moveX, moveY);
 
-        if(scale > 1){
-            view.setTranslateX(moveX);
-            view.setTranslateY(moveY);
-            view.repaint();
-            System.out.println(String.valueOf(view.getLocation()));
+        //Constraints
+        double parentsize = 1000.0;
+        double getMarkerXLimit = view.getMarker().getX()/4;
+        double getMarkerYLimit = view.getMarker().getY()/4;
+        //define limits
+        double left = 0;
+        double top = 0;
+        double right = parentsize - getMarkerXLimit;
+        double bottom = parentsize - getMarkerYLimit;
+        boolean limitBox = (moveX >= left && moveX <= right) && (moveY >= top && moveY <= bottom);
+        boolean limitRightHeight = moveX >= left && (moveY >= top && moveY <= bottom);
+        boolean limitBottomWidth = moveY >= bottom && (moveX >= left && moveX <= right);
+        boolean limitLeftHeight = moveX <= left && (moveY >= top && moveY <= bottom);
+        boolean limitTopWidth = moveY <= top && (moveX >= left && moveX <= right);
+        
+        //Make sure it only moves within limits
+        if(limitBox){//move freely if you're within ALL limits
+            view.updateMarker(moveX, moveY);
+        }else if(limitRightHeight){//if the limit is beyond the right side, stay on right and move within Y
+            view.updateMarker((int) right, moveY);
+        }else if(limitBottomWidth){//if the limit is beyond the bottom, stay on bottom and move within X
+            view.updateMarker(moveX, (int) bottom);
+        }else if(limitLeftHeight){//if the limit is less than left side, stay on left then move within Y
+            view.updateMarker((int) left, moveY);
+        }else if(limitTopWidth){//if the limit is less than top side, stay on top then move within X
+            view.updateMarker(moveX, (int) top);
         }
-
+        
     }
 }
