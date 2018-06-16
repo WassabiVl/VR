@@ -52,6 +52,8 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         double scale = view.getScale();
 
 
+        
+        moveSmallMarker(x,y, scale);
 
         if (e.getButton() == MouseEvent.BUTTON1){
             /*
@@ -161,6 +163,8 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
             groupRectangle = null;
         }
         view.repaint();
+        double scale = view.getScale();
+        moveSmallMarker(x,y, scale);
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -168,8 +172,10 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int y = e.getY();
         double scale = view.getScale();
         /*
-         * Aufgabe 1.2
+         * Homework 1.2
          */
+            moveSmallMarker(x,y, scale);
+
         if (fisheyeMode){
             /*
              * handle fisheye mode interactions
@@ -220,7 +226,9 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         return currentElement;
     }
 
-
+    /*
+    * Homework 1.1
+    */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int x = e.getScrollAmount();
@@ -228,6 +236,28 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         double scale = view.getScale();
         view.setScale(scale - (x * z)/3);
         view.repaint();
+
+    }
+
+    /*
+    * Homework 1.2
+    */
+    public void moveSmallMarker(int x, int y, double scale) {
+        // System.out.println("Scale:  " + String.valueOf(scale));
+        //     System.out.println("Marker:  " + String.valueOf(view.getMarker()));
+        //     System.out.println("x:  " + String.valueOf(x) + " || possible x: " + String.valueOf(x*(10)));
+        //     System.out.println("y:  " + String.valueOf(y) + " || possible y: " + String.valueOf(y*(10)));
+            
+        int moveX = x * 10;
+        int moveY = y * 10;
+        view.updateMarker(moveX, moveY);
+
+        if(scale > 1){
+            view.setTranslateX(moveX);
+            view.setTranslateY(moveY);
+            view.repaint();
+            System.out.println(String.valueOf(view.getLocation()));
+        }
 
     }
 }

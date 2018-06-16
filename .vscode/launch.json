@@ -1,0 +1,60 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Diagram<InfoVis_Assignment_SS15>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "infovis.diagram.Diagram",
+            "projectName": "InfoVis_Assignment_SS15",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Example<InfoVis_Assignment_SS15>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "infovis.example.Example",
+            "projectName": "InfoVis_Assignment_SS15",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ParaCoords<InfoVis_Assignment_SS15>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "infovis.paracoords.ParaCoords",
+            "projectName": "InfoVis_Assignment_SS15",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Scatterplot<InfoVis_Assignment_SS15>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "infovis.scatterplot.Scatterplot",
+            "projectName": "InfoVis_Assignment_SS15",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0
+        }
+    ]
+}

@@ -14,8 +14,8 @@ public class View extends JPanel{
     private double scale = 1;
     private double translateX= 0;
     private double translateY=0;
-    private Rectangle2D marker = new Rectangle2D.Float(0,0,1000,1000);
-    private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,1000,1000);
+    private Rectangle2D marker = new Rectangle2D.Float(0,0,200,200);//small window (red)
+    private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,1000,1000);//big window (blue)
     private Graphics2D g2D;
 
 
@@ -35,6 +35,10 @@ public class View extends JPanel{
 
     @Override
     public void paint(Graphics g) {
+        
+        /*
+        * Homework 1.1
+        */
         if (getScale()<=0) {
             setScale(1);
         }
@@ -46,15 +50,19 @@ public class View extends JPanel{
         Color color1 = Color.BLUE;
         Color color2 = Color.RED;
         Color color3 = new Color(0f,0f,0f,0f);
-        g2D.setColor(color1);
+
+        /*
+        * Homework 1.2
+        */
         g2D.scale(.1/getScale(),.1/getScale());
-        g2D.draw(overviewRect); //fills the
+        g2D.setColor(color1);
+        g2D.draw(overviewRect);
         paintDiagram(g2D);
-        g2D.scale(1/getScale(),1/getScale());
+
         g2D.setColor(color2);
         g2D.draw(marker);
-        paintDiagram(g2D);
-        System.out.println(getScale());
+        // //paintDiagram(g2D);
+        // System.out.println(getScale());
 
     }
 
@@ -88,12 +96,20 @@ public class View extends JPanel{
         setTranslateY(y);
     }
     public void updateMarker(int x, int y){
-        marker.setRect(x, y, 16, 10);
+        /**
+         * 	setRect(double x, double y, double width, double height)
+Sets the bounds of this Rectangle to the integer bounds which encompass the specified x, y, width, and height.
+         */
+        marker.setRect(x, y, 200, 200);
     }
     public Rectangle2D getMarker(){
         return marker;
     }
     public boolean markerContains(int x, int y){
+        /**
+         * contains(int x, int y)
+Checks whether or not this Rectangle contains the point at the specified location (x,y).
+         */
         return marker.contains(x, y);
     }
 
