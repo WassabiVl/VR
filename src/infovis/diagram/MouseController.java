@@ -53,9 +53,9 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 
 
         
-        moveSmallMarker(x,y, scale);
+//        moveSmallMarker(x,y, scale);
 
-        if (e.getButton() == MouseEvent.BUTTON1){
+        if (e.getButton() == MouseEvent.BUTTON3){
             /*
              * add grouped elements to the model
              */
@@ -164,20 +164,24 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         }
         view.repaint();
         double scale = view.getScale();
-        moveSmallMarker(x,y, scale);
+//        moveSmallMarker(x,y, scale);
     }
 
     public void mouseDragged(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
         double scale = view.getScale();
+        System.out.println(scale);
+        double test = 1000 - (1000*(1/scale));
         /*
          * Homework 1.2
          */
-        moveSmallMarker(x,y, scale);
-        view.setTranslateX((x) * -1);
-        view.setTranslateY((y) * -1);
-        view.repaint();
+        if (scale > 1 && test > x && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
+            view.setTranslateX((x) * -1);
+            view.setTranslateY((y) * -1);
+//            moveSmallMarker(x,y, scale);
+
+        }
 
         if (fisheyeMode){
             /*
@@ -239,7 +243,6 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         double scale = view.getScale();
         view.setScale(scale - (x * z)/3);
         view.repaint();
-
     }
 
     /*

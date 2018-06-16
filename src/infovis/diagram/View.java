@@ -14,9 +14,9 @@ public class View extends JPanel{
     private double scale = 1;
     private double translateX= 0;
     private double translateY=0;
-    private Rectangle2D marker = new Rectangle2D.Float(0,0,200,200);//small window (red)
-    private Rectangle2D overviewRect = new Rectangle2D.Float(0,0,1000,1000);//big window (blue)
-    private Graphics2D g2D;
+    private Rectangle2D marker;//small window (red)
+    private Rectangle2D overviewRect;//big window (blue)
+
 
 
     public Model getModel() {
@@ -33,8 +33,8 @@ public class View extends JPanel{
     }
 
 
-    @Override
     public void paint(Graphics g) {
+        Graphics2D g2D = (Graphics2D) g;
         Color color1 = Color.BLUE;
         Color color2 = Color.RED;
         Color color3 = new Color(0f,0f,0f,0f);
@@ -44,30 +44,35 @@ public class View extends JPanel{
         */
         if (getScale()<=0) {
             setScale(1);
+           updateTranslation(0,0);
         }
-        g2D = (Graphics2D) g;
+
+
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
-/*
-        * Homework 1.2 
-        */
-        g2D.scale(.1/getScale(),.1/getScale());
-        g2D.setColor(color2);
-        g2D.draw(marker);
-        
+        marker = new Rectangle2D.Float(0,0,getWidth(),getHeight());
+        overviewRect = new Rectangle2D.Float(0,0,getWidth(),getHeight());
         g2D.scale(1*getScale(),1*getScale());
+        g2D.translate(getTranslateX(), getTranslateY());
+        paintDiagram(g2D);
+
+        /*
+         * Homework 1.2
+         */
+        g2D.translate(-getTranslateX(), -getTranslateY());
+        g2D.scale(.1/getScale(),.1/getScale());
         g2D.setColor(color1);
         g2D.draw(overviewRect);
         paintDiagram(g2D);
-        
 
-        g2D.scale(1*getScale(),1*getScale());
-        // g2D.translate(getTranslateX(), getTranslateY());
-        paintDiagram(g2D);
+        g2D.translate(-getTranslateX(),-getTranslateY());
+        g2D.scale(1/getScale(),1/getScale());
+        g2D.setColor(color2);
+        g2D.draw(marker);
+
 
         
         // //paintDiagram(g2D);
-        // System.out.println(getScale());
         
         
 
@@ -104,7 +109,7 @@ public class View extends JPanel{
     }
     public void updateMarker(int x, int y){
         
-        marker.setRect(x, y, 200, 200);
+        marker.setRect(x, y, 1000, 1000);
     }
 
     public Rectangle2D getMarker(){

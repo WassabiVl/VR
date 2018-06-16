@@ -72,7 +72,7 @@ public class View extends JPanel {
                 double max_x = range_x.getMax();
                 double min_x = range_x.getMin();
                 double value_x = (a - min_x)/(max_x-min_x);
-                float valuex = (float) (clientWidth* (x + value_x*(x+1)));
+                float valuex = (float) (clientWidth*index_x + clientWidth*value_x);
                 index_x++;
                 for (int y=0;y<model.getList().size();y++) {
                     Data data_y =model.getList().get(y);
@@ -81,8 +81,10 @@ public class View extends JPanel {
                         Range range_y = model.getRanges().get(index_y);
                         double max_y = range_y.getMax();
                         double min_y = range_y.getMin();
-                        double value_y = (b - min_y)/(max_y-min_y);
-                        float valuey = (float) (clientHeight* (y + value_y*(y+1)));
+                        double value_y = ((max_y-min_y)-(b - min_y))/(max_y-min_y);
+
+                        float valuey = (float) (clientHeight * (index_y + value_y));
+                        System.out.println(value_y);
                         Color color1 = Color.BLUE;
                         Rectangle2D mark = new Rectangle2D.Float(valuex,valuey,2,2);//small window (red)
                         g2D.setColor(color1);
