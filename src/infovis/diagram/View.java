@@ -50,8 +50,8 @@ public class View extends JPanel{
 
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
-        marker = new Rectangle2D.Float(0,0,getWidth(),getHeight());
-        overviewRect = new Rectangle2D.Float(0,0,getWidth(),getHeight());
+        marker = new Rectangle2D.Float(0,0,1000,1000);
+        overviewRect = new Rectangle2D.Float(0,0,1000,1000);
         g2D.scale(1*getScale(),1*getScale());
         g2D.translate(getTranslateX(), getTranslateY());
         paintDiagram(g2D);

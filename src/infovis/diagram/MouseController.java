@@ -53,7 +53,7 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 
 
         
-//        moveSmallMarker(x,y, scale);
+       moveSmallMarker(x,y, scale);
 
         if (e.getButton() == MouseEvent.BUTTON3){
             /*
@@ -164,7 +164,7 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         }
         view.repaint();
         double scale = view.getScale();
-//        moveSmallMarker(x,y, scale);
+       moveSmallMarker(x,y, scale);
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -176,7 +176,7 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         /*
          * Homework 1.2
          */
-        if (scale > 1 && test_x > x && test_y > y && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
+        if (scale > 1 && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
             view.setTranslateX((x) * -1);
             view.setTranslateY((y) * -1);
             moveSmallMarker(x,y, scale);
@@ -256,15 +256,15 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         //Constraints
         double parentsize_x = view.getWidth();
         double parentsize_y = view.getHeight();
-        double getMarkerXLimit = view.getMarker().getX()/4;
-        double getMarkerYLimit = view.getMarker().getY()/4;
+        double getMarkerXLimit = view.getMarker().getX();
+        double getMarkerYLimit = view.getMarker().getY();
         //define limits
         double left = 0;
         double top = 0;
-        double right = parentsize_x - getMarkerXLimit;
-        double bottom = parentsize_y - getMarkerYLimit;
+        double right = 20;
+        double bottom = parentsize_y - view.getMarker().getHeight();
         boolean limitBox = (moveX >= left && moveX <= right) && (moveY >= top && moveY <= bottom);
-        boolean limitRightHeight = moveX >= left && (moveY >= top && moveY <= bottom);
+        boolean limitRightHeight = moveX >= 10 && (moveY >= top && moveY <= bottom);
         boolean limitBottomWidth = moveY >= bottom && (moveX >= left && moveX <= right);
         boolean limitLeftHeight = moveX <= left && (moveY >= top && moveY <= bottom);
         boolean limitTopWidth = moveY <= top && (moveX >= left && moveX <= right);
