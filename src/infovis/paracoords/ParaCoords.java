@@ -1,7 +1,7 @@
 package infovis.paracoords;
 
 import infovis.gui.GUI;
-import infovis.scatterplot.Model;
+import infovis.paracoords.Model;
 
 import javax.swing.SwingUtilities;
 

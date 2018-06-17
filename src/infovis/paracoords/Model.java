@@ -1,8 +1,8 @@
 package infovis.paracoords;
 
 import infovis.debug.Debug;
-import infovis.scatterplot.Data;
-import infovis.scatterplot.Range;
+import infovis.paracoords.Data;
+import infovis.paracoords.Range;
 
 import java.io.*;
 import java.util.ArrayList;
