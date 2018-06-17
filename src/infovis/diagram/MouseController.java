@@ -171,15 +171,17 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int x = e.getX();
         int y = e.getY();
         double scale = view.getScale();
-        System.out.println(scale);
-        double test = 1000 - (1000*(1/scale));
+        double test_x = view.getWidth() - (view.getWidth()*(1/scale));
+        double test_y = view.getHeight() - (view.getHeight()*(1/scale));
         /*
          * Homework 1.2
          */
-        if (scale > 1 && test > x && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
+        System.out.println(mouseOffsetX);
+        System.out.println(x);
+        if (scale > 1 && test_x > x && test_y > y && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
             view.setTranslateX((x) * -1);
             view.setTranslateY((y) * -1);
-//            moveSmallMarker(x,y, scale);
+            moveSmallMarker(x,y, scale);
 
         }
 
@@ -254,14 +256,15 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int moveY = y * 10;
 
         //Constraints
-        double parentsize = 1000.0;
+        double parentsize_x = view.getWidth();
+        double parentsize_y = view.getHeight();
         double getMarkerXLimit = view.getMarker().getX()/4;
         double getMarkerYLimit = view.getMarker().getY()/4;
         //define limits
         double left = 0;
         double top = 0;
-        double right = parentsize - getMarkerXLimit;
-        double bottom = parentsize - getMarkerYLimit;
+        double right = parentsize_x - getMarkerXLimit;
+        double bottom = parentsize_y - getMarkerYLimit;
         boolean limitBox = (moveX >= left && moveX <= right) && (moveY >= top && moveY <= bottom);
         boolean limitRightHeight = moveX >= left && (moveY >= top && moveY <= bottom);
         boolean limitBottomWidth = moveY >= bottom && (moveX >= left && moveX <= right);
