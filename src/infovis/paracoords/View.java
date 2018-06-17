@@ -16,6 +16,15 @@ public class View extends JPanel {
     }
     ArrayList<ArrayList<Line2D>> Lines;
     private ArrayList<Line2D> markLines = new ArrayList<>();
+//    int[] yourvar = new int[model.getLabels().size()];
+    int[] yourvar = new int[7];
+
+    public void setYourvar(int[] yourvar){
+        this.yourvar = yourvar;
+    }
+    public int[] getYourvar(){
+        return this.yourvar;
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -30,17 +39,16 @@ public class View extends JPanel {
 
         // Get the width of the JPanel
         Dimension d = getSize();
-        int clientWidth = d.width;
+        int clientWidth =d.width;
         int clientHeight = d.height;
         int num = model.getLabels().size();
         clientWidth = clientWidth/num;
-
-
+        int[] adding = getYourvar();
 
         for (String l : model.getLabels()) {
             //horizontal
-            int title_y = getHeight() - titleFontMetrics.getAscent();
-            int title_x = clientWidth*Index + titleFontMetrics.getAscent() ;
+            int title_y = getHeight() - titleFontMetrics.getAscent() ;
+            int title_x = clientWidth*Index + titleFontMetrics.getAscent() +adding[Index];
             g2D.setFont(titleFont);
             // Draw the title
             g2D.drawString(l, title_x, title_y);
@@ -52,7 +60,7 @@ public class View extends JPanel {
         for (Range r : model.getRanges()) {
             //horizontal
             int title_y = clientHeight - titleFontMetrics.getAscent();
-            int title_x = clientWidth*Index + titleFontMetrics.getAscent() ;
+            int title_x = clientWidth*Index + titleFontMetrics.getAscent()+adding[Index] ;
             g2D.setFont(titleFont);
             String r_max = String.valueOf(r.getMax());
             String r_min = String.valueOf(r.getMin());
@@ -94,23 +102,23 @@ public class View extends JPanel {
                 double value_y = ((max_y-min_y)-(a - min_y))/(max_y-min_y);
                 int valuey = (int) (clientHeight*value_y);
                 if (valuey == 0){
-                    valuey = titleFontMetrics.getAscent()+2;
+                    valuey = titleFontMetrics.getAscent()+2 +adding[index_x];
                 } else if (valuey >= clientHeight-3*titleFontMetrics.getAscent()) {
-                    valuey = clientHeight -3*titleFontMetrics.getAscent();
+                    valuey = clientHeight -3*titleFontMetrics.getAscent()+adding[index_x];
                 }
                 g2D.setColor(color);
                 g2D.setStroke(new BasicStroke(2));
                 if (previous_data_y == 0){
-                    Line2D lines2d = new Line2D.Double(previous_data+titleFontMetrics.getAscent(), valuey, clientWidth*index_x + titleFontMetrics.getAscent(), valuey);
+                    Line2D lines2d = new Line2D.Double(previous_data+titleFontMetrics.getAscent(), valuey, clientWidth*index_x + titleFontMetrics.getAscent()+adding[index_x], valuey);
                     g2D.drawLine(previous_data+titleFontMetrics.getAscent(), valuey, clientWidth*index_x + titleFontMetrics.getAscent(), valuey);
                     Line.add(lines2d);
                 }else {
-                    Line2D lines2d = new Line2D.Double(previous_data+titleFontMetrics.getAscent(), previous_data_y, clientWidth*index_x + titleFontMetrics.getAscent(), valuey);
+                    Line2D lines2d = new Line2D.Double(previous_data+titleFontMetrics.getAscent(), previous_data_y, clientWidth*index_x + titleFontMetrics.getAscent()+adding[index_x], valuey);
                     g2D.drawLine(previous_data+titleFontMetrics.getAscent(), previous_data_y, clientWidth*index_x + titleFontMetrics.getAscent(), valuey);
                     Line.add(lines2d);
 
                 }
-                previous_data = clientWidth*index_x;
+                previous_data = clientWidth*index_x+adding[index_x];
                 previous_data_y = valuey;
                 index_x++;
 

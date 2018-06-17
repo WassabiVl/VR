@@ -28,10 +28,8 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	    ArrayList<ArrayList<Line2D>> lines = view.Lines;
 		for (ArrayList<Line2D> line : lines){
             for (Line2D lineA : line) {
-                System.out.println(Line2D.ptLineDistSq(lineA.getX1(),lineA.getY1(),lineA.getX2(),lineA.getY2(),x,y));
                 if (Line2D.ptLineDistSq(lineA.getX1(),lineA.getY1(),lineA.getX2(),lineA.getY2(),x,y) <= 1.0) {
                     view.setMarkLines(line);
-                    System.out.println("found");
                 }
             }
 
@@ -45,6 +43,24 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        int v = view.getWidth();
+        System.out.println(y);
+        int[] var = view.getYourvar();
+        for(int index = 0; index < var.length; index++) {
+            if (index != 0) {
+                if (v / index == x) {
+                    var[index] = x;
+                }
+            } else{
+                if (v == y){
+                    var[0] = x;
+                }
+            }
+        }
+        view.setYourvar(var);
+        view.repaint();
 
 	}
 
