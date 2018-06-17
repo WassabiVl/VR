@@ -1,8 +1,5 @@
 package infovis.paracoords;
 
-import infovis.paracoords.Model;
-
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -12,8 +9,7 @@ import java.util.ArrayList;
 public class MouseController implements MouseListener, MouseMotionListener {
 	private View view = null;
 	private Model model = null;
-	Shape currentShape = null;
-	
+
 	public void mouseClicked(MouseEvent e) {
 		
 	}

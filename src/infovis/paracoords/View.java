@@ -1,9 +1,5 @@
 package infovis.paracoords;
 
-import infovis.paracoords.Data;
-import infovis.paracoords.Model;
-import infovis.paracoords.Range;
-
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -18,7 +14,7 @@ public class View extends JPanel {
     public Rectangle2D getMarkerRectangle() {
         return markerRectangle;
     }
-    public ArrayList<ArrayList<Line2D>> Lines;
+    ArrayList<ArrayList<Line2D>> Lines;
     private ArrayList<Line2D> markLines = new ArrayList<>();
 
     @Override
@@ -135,7 +131,7 @@ public class View extends JPanel {
         this.model = model;
     }
 
-    public ArrayList<Line2D> getMarkLines() {
+    private ArrayList<Line2D> getMarkLines() {
         return markLines;
     }
 
