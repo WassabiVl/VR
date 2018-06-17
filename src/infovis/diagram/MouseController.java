@@ -176,8 +176,6 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         /*
          * Homework 1.2
          */
-        System.out.println(mouseOffsetX);
-        System.out.println(x);
         if (scale > 1 && test_x > x && test_y > y && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
             view.setTranslateX((x) * -1);
             view.setTranslateY((y) * -1);
