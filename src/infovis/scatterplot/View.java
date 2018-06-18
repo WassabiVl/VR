@@ -23,10 +23,10 @@ import javax.swing.JPanel;
 public class View extends JPanel {
     private Model model = null;
     private Rectangle2D square = new Rectangle2D.Double(0,0,0,0);
-    private Rectangle2D dataPoint = new Rectangle2D.Double(0,0,0,0); 
-    private Map<Pair<String, String>, Rectangle2D.Double[]> dataPoints = new HashMap<Pair<String, String>, Rectangle2D.Double[]>();
-    private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0); 
-    
+    private Rectangle2D dataPoint = new Rectangle2D.Double(0,0,0,0);
+    private Map<Pair<String,String>, Rectangle2D.Double[]> dataPoints = new HashMap<>();
+    private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0);
+
     private Color orange = Color.ORANGE;
     private Color blue = Color.BLUE;
     private Color black = Color.BLACK;
@@ -39,14 +39,14 @@ public class View extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        /**
+        /*
          * Homework 2.1
          */
         //Store Label, Range, and Models
         ArrayList<String> labels = model.getLabels();
         ArrayList<Range> ranges = model.getRanges();
         ArrayList<Data> models = model.getList();
-            
+
         // Initialize the titleFont
         Font titleFont = new Font("Verdana", Font.BOLD, 7);
         titleFont.deriveFont(6f);
@@ -54,7 +54,7 @@ public class View extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2D.clearRect(0, 0, getWidth(), getHeight());
-        
+
         // Get the width of the JPanel
         Dimension dim = getSize();
         int padding = 12;
@@ -62,7 +62,7 @@ public class View extends JPanel {
         int clientHeight = dim.height - padding;
         int num = model.getLabels().size();
         clientWidth = clientWidth/num;
-        clientHeight = clientHeight/num;     
+        clientHeight = clientHeight/num;
 
         g2D.fill(dataPoint);
         g2D.setColor(black);
@@ -71,8 +71,6 @@ public class View extends JPanel {
         double sqHeight = clientHeight;
         double sqWidth = clientWidth;
 
-        //counters for points (generate points), list of points (match points), rows, and columns
-        int pointIndex = 0, listIndex = 0, countRow = 0, countCol = 0;
 
         //Make the table
         for(String row : labels){
@@ -87,7 +85,7 @@ public class View extends JPanel {
             // g2D.drawLine(titlevx,titlevy,dim.width,titlevy);
             // g2D.drawString(row, titlevx, titlevy);
             // Draw the title but rotated to the left
-            drawRotate(g2D, titlevx, titlevy, -90, row);
+            drawRotate(g2D, titlevx, titlevy, row);
 
             for(String col : labels){
                 int currentCol = labels.indexOf(col);
@@ -104,7 +102,7 @@ public class View extends JPanel {
                 double valMatchY = sqHeight / (bottomLimit - topLimit);
                 //All the points!
                 Rectangle2D.Double[] points= new Rectangle2D.Double [models.size()];
-        
+
                 //Make the labels!
                 //horizontal
                 int titlehy = titleFontMetrics.getAscent();
@@ -116,53 +114,47 @@ public class View extends JPanel {
                 //Draw the square
                 square.setRect(posX, posY, sqWidth, sqHeight);
                 g2D.draw(square);
-                
+
                 //Get the new point based on the value/key of both of the titles
-                Pair<String,String> newPoint = new Pair(hTitle, vTitle);
+                Pair<String,String> newPoint = new Pair<>(hTitle, vTitle);
 
                 //Make the Data points!
-                pointIndex = 0;
                 for (Data d : models) {
                     double valOnX = d.getValues()[currentCol] - leftLimit;
                     double valOnY = d.getValues()[currentRow] - topLimit;
                     valOnX *= valMatchX;
                     valOnY *= valMatchY;
+                    points[models.indexOf(d)] = new Rectangle2D.Double(posX + valOnX + 2, posY + valOnY + 2, 4, 4);
 
-                    points[pointIndex] = new Rectangle2D.Double(posX + valOnX + 2, posY + valOnY + 2, 4, 4);
-                
-                    pointIndex++;
                 }
 
                 dataPoints.put(newPoint, points);
-            
-                listIndex = 0;
+
+                int listIndex = 0;
                 for (Rectangle2D rect : dataPoints.get(newPoint)) {
-                    g2D.setColor(white);
+                    Color color = white;
                     if (markerRectangle.contains(rect)) {
-                        g2D.setColor(red);
+                        color = red;
                     }else {
-                        for(Pair<String, String> match : dataPoints.keySet()){
+                        for(Pair match : dataPoints.keySet()){
                             // Debug.println(String.valueOf(match));
                             Rectangle2D.Double matchRect = dataPoints.get(match)[listIndex];
                             if (markerRectangle.contains(matchRect)) {
-                                g2D.setColor(red);
+                                color = red;
                             }
                         }
                     }
-                    
+                    g2D.setColor(color);
                     g2D.fill(rect);
                     g2D.setColor(black);
                     g2D.draw(rect);
-
                     listIndex++;
                 }
 
-                countCol++;
             }
-            countRow++;
         }
 
-        /**
+        /*
          * Homework 2.2
          */
         //Make the brush and linking rectangle
@@ -178,21 +170,20 @@ public class View extends JPanel {
      * Rotate the text
      * Taken from StackOverflow: https://stackoverflow.com/questions/10083913/how-to-rotate-text-with-graphics2d-in-java
      */
-    private void drawRotate(Graphics2D g2d, double x, double y, int angle, String text){    
+    private void drawRotate(Graphics2D g2d, double x, double y, String text){
         g2d.translate((float)x,(float)y);
-        g2d.rotate(Math.toRadians(angle));
+        g2d.rotate(Math.toRadians(-90));
         g2d.drawString(text,(int) (x * -1) -70,0);
-        g2d.rotate(-Math.toRadians(angle));
+        g2d.rotate(-Math.toRadians(-90));
         g2d.translate(-(float)x,-(float)y);
     }
-    
+
     /**
      * Homework 2.2
      * Brush and linking rectangles
      */
     private void makeBLRectangle(Graphics2D g2D){
         g2D.setColor(red);
-		g2D.draw(markerRectangle);
+        g2D.draw(markerRectangle);
     }
 }
-     
