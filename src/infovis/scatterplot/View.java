@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 
 public class View extends JPanel {
     private Model model = null;
-    private Rectangle2D cell = new Rectangle2D.Double(0,0,0,0);
+    private Rectangle2D square = new Rectangle2D.Double(0,0,0,0);
     private Rectangle2D dataPoint = new Rectangle2D.Double(0,0,0,0); 
     private Map<Pair<String, String>, Rectangle2D.Double[]> dataPoints = new HashMap<Pair<String, String>, Rectangle2D.Double[]>();
     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0); 
@@ -57,27 +57,22 @@ public class View extends JPanel {
         
         // Get the width of the JPanel
         Dimension dim = getSize();
-        int clientWidth = dim.width;
-        int clientHeight = dim.height;
+        int padding = 12;
+        int clientWidth = dim.width - padding;
+        int clientHeight = dim.height - padding;
         int num = model.getLabels().size();
         clientWidth = clientWidth/num;
         clientHeight = clientHeight/num;     
-        
-        g2D.setColor(orange);
-        g2D.fill(cell);
-        g2D.setColor(blue);
+
         g2D.fill(dataPoint);
         g2D.setColor(black);
 
         //Generate Content
-        int totalLabels = model.getLabels().size();
-        int Index = 0;
-        int paddingLeft = 10;
-        int paddingTop = 20;
-        double sqHeight = (getHeight())/ totalLabels;
-        double sqWidth = (getWidth())/ totalLabels;
+        double sqHeight = clientHeight;
+        double sqWidth = clientWidth;
 
-        int labelIndex = 0, listIndex = 0, countRow = 0, countCol = 0;
+        //counters for points (generate points), list of points (match points), rows, and columns
+        int pointIndex = 0, listIndex = 0, countRow = 0, countCol = 0;
 
         //Make the table
         for(String row : labels){
@@ -97,9 +92,19 @@ public class View extends JPanel {
             for(String col : labels){
                 int currentCol = labels.indexOf(col);
                 String vTitle = labels.get(currentCol);
-                double posX = (currentCol * sqWidth )+ paddingLeft;
-                double posY = (currentRow * sqHeight) + paddingTop;
-
+                double posX = (currentCol * sqWidth )+ padding;
+                double posY = (currentRow * sqHeight) + padding;
+                //Box limit for each square
+                double leftLimit = ranges.get(currentCol).getMin();
+                double rightLimit = ranges.get(currentCol).getMax();
+                double topLimit = ranges.get(currentRow).getMin();
+                double bottomLimit = ranges.get(currentRow).getMax();
+                //X and Y position for the matching data point
+                double valMatchX = sqWidth / (rightLimit - leftLimit);
+                double valMatchY = sqHeight / (bottomLimit - topLimit);
+                //All the points!
+                Rectangle2D.Double[] points= new Rectangle2D.Double [models.size()];
+        
                 //Make the labels!
                 //horizontal
                 int titlehy = titleFontMetrics.getAscent();
@@ -108,29 +113,39 @@ public class View extends JPanel {
                 // Draw the title
                 g2D.drawString(col, titlehx, titlehy);
 
-                //Draw the cell
-                cell.setRect(posX, posY, sqWidth, sqHeight);
-                g2D.draw(cell);
+                //Draw the square
+                square.setRect(posX, posY, sqWidth, sqHeight);
+                g2D.draw(square);
                 
+                //Get the new point based on the value/key of both of the titles
                 Pair<String,String> newPoint = new Pair(hTitle, vTitle);
-                // private void fillDataPoints(int currentCol, int currentRow, int posX, int posY, double sqHeight, double sqWidth, Pair<String, String> pairKey){
- 
-                fillDataPoints(currentCol, currentRow, posX, posY, sqHeight, sqWidth, newPoint);
-                // Debug.println(String.valueOf(dataPoints));
+
+                //Make the Data points!
+                pointIndex = 0;
+                for (Data d : models) {
+                    double valOnX = d.getValues()[currentCol] - leftLimit;
+                    double valOnY = d.getValues()[currentRow] - topLimit;
+                    valOnX *= valMatchX;
+                    valOnY *= valMatchY;
+
+                    points[pointIndex] = new Rectangle2D.Double(posX + valOnX + 2, posY + valOnY + 2, 4, 4);
+                
+                    pointIndex++;
+                }
+
+                dataPoints.put(newPoint, points);
             
-                int i = 0;
+                listIndex = 0;
                 for (Rectangle2D rect : dataPoints.get(newPoint)) {
                     g2D.setColor(white);
                     if (markerRectangle.contains(rect)) {
                         g2D.setColor(red);
                     }else {
-                       
                         for(Pair<String, String> match : dataPoints.keySet()){
                             // Debug.println(String.valueOf(match));
-                            Rectangle2D.Double matchRect = dataPoints.get(match)[i];
+                            Rectangle2D.Double matchRect = dataPoints.get(match)[listIndex];
                             if (markerRectangle.contains(matchRect)) {
                                 g2D.setColor(red);
-                                break;
                             }
                         }
                     }
@@ -139,7 +154,7 @@ public class View extends JPanel {
                     g2D.setColor(black);
                     g2D.draw(rect);
 
-                    i++;
+                    listIndex++;
                 }
 
                 countCol++;
@@ -152,7 +167,6 @@ public class View extends JPanel {
          */
         //Make the brush and linking rectangle
         makeBLRectangle(g2D);
-        
     }
 
     public void setModel(Model model) {
@@ -171,35 +185,7 @@ public class View extends JPanel {
         g2d.rotate(-Math.toRadians(angle));
         g2d.translate(-(float)x,-(float)y);
     }
-
-    private void fillDataPoints(int currentCol, int currentRow, double posX, double posY, double sqHeight, double sqWidth, Pair<String, String> pairKey){
- 
-        //X - Axis
-        double xmin = model.getRanges().get(currentCol).getMin();
-        double xmax = model.getRanges().get(currentCol).getMax();
-        double valMatchX = sqWidth / (xmax - xmin);
-        
-        //Y - Axis
-        double ymin = model.getRanges().get(currentRow).getMin();
-        double ymax = model.getRanges().get(currentRow).getMax();
-        double valMatchY = sqHeight / (ymax - ymin);
-
-        Rectangle2D.Double[] points= new Rectangle2D.Double [model.getList().size()];
-        int index = 0;
-        for (Data d : model.getList()) {
-            double valOnX = d.getValues()[currentCol] - xmin;
-            double valOnY = d.getValues()[currentRow] - ymin;
-            valOnX *= valMatchX;
-            valOnY *= valMatchY;
-
-            points[index] = new Rectangle2D.Double(posX + valOnX + 4, posY + valOnY + 4, 4, 4);
-        
-            index++;
-        }
-
-        dataPoints.put(pairKey, points);
-    }
-
+    
     /**
      * Homework 2.2
      * Brush and linking rectangles
