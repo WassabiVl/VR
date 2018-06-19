@@ -12,51 +12,63 @@ import java.util.Iterator;
  * 
  */
 
-public class Fisheye implements Layout{
 
-	private double [] oldTranslateX;
-	private double [] oldTranslateY;
-	private double [] oldScaleX;
-	private double [] oldScaleY;
+public class Fisheye implements Layout{
+	private int posX;
+	private int posY;
+
+	//Set
+	public void setPosX(int x){
+		this.posX = x;
+	}
+	public void setPosY(int y){
+		this.posY = y;
+	}
+
+	//Get
+	public int getPosX(){
+		return posX;
+	}
+	public int getPosY(){
+		return posY;
+	}
 
 	public void setMouseCoords(int x, int y, View view) {
 		// TODO Auto-generated method stub
+		this.setPosX(x);
+		this.setPosY(y);
 	}
 
-	public Model transform(Model model, View view, int x, int y) {
-		
-//		System.out.println("HAAAALLLLLOOOO");
+
+	@Override
+	public Model transform(Model model, View view) {
 		for (Vertex vertex: model.getVertices()){
-//			int tmp_x = (int) (x - vertex.getWidth() * 0.5 * view.getScale());
-//			int tmp_y = (int) (y - vertex.getHeight() * 0.5 * view.getScale());
 			
-			int tmp_x = x;
-			int tmp_y = y;
+			int tempX = getPosX();
+			int tempY = getPosY();
 			
-			vertex.setX(fishTranslate(vertex.getCenterX() , tmp_x / view.getScale(), view.getWidth(), view.getScale()) /*- vertex.getWidth() * 0.5 * view.getScale()*/);
-			vertex.setY(fishTranslate(vertex.getCenterY() , tmp_y / view.getScale(), view.getHeight(), view.getScale()) /*- vertex.getHeight() * 0.5 * view.getScale()*/);
-			vertex.setWidth(fishScale(vertex.getX() , vertex.getCenterX(), tmp_x/ view.getScale() , view.getWidth(), view.getScale()));
-			vertex.setHeight(fishScale(vertex.getY(), vertex.getCenterY(), tmp_y/ view.getScale() , view.getHeight(), view.getScale()));
+			vertex.setX(makeTranslation(vertex.getCenterX() , tempX / view.getScale(), view.getWidth(), view.getScale()));
+			vertex.setY(makeTranslation(vertex.getCenterY() , tempY / view.getScale(), view.getHeight(), view.getScale()) );
+			vertex.setWidth(makeScale(vertex.getX() , vertex.getCenterX(), tempX/ view.getScale() , view.getWidth(), view.getScale()));
+			vertex.setHeight(makeScale(vertex.getY(), vertex.getCenterY(), tempY/ view.getScale() , view.getHeight(), view.getScale()));
 		}
 		return model;
 	}
 	
 	
-	static double fishTranslate(double pNorm, double pFocus, double screenBoundary, double d){
+	private double makeTranslation(double pNorm, double pFocus, double screenBoundary, double d){
 
 		double dMax = 0;
-		
 
+		//Change the max depending on the focus of the norm
 		if (pNorm > pFocus) {
-//			System.out.println("Fall 1");
 			dMax = screenBoundary - pFocus;
 		} else if ( pNorm < pFocus) {
-//			System.out.println("Fall 2");
-			dMax = - pFocus;
+			dMax -= pFocus;
 		}  else {
 			return pNorm;
 		}
-		
+
 		double dNorm = pNorm - pFocus;
 		double value = dNorm / dMax;
 		double g = ((d + 1) * value) / (d * value + 1);
@@ -65,19 +77,13 @@ public class Fisheye implements Layout{
 		return pFish;
 	}
 	
-	
-	static double fishScale(double qNorm, double pNorm, double pFocus, double screenBoundary, double d){
-		double qFish = fishTranslate(qNorm, pFocus, screenBoundary, d); //TODO augment pNorm
+	private double makeScale(double qNorm, double pNorm, double pFocus, double screenBoundary, double d){
+		double qFish = makeTranslation(qNorm, pFocus, screenBoundary, d);
+		double fishX = Math.abs(qFish - makeTranslation(pNorm, pFocus, screenBoundary, d));
+		double fishY = Math.abs(makeTranslation(pNorm, pFocus, screenBoundary, d) - qFish);
+		double sGeom = 2 * Math.min(fishX, fishY); 
 		
-		double sGeom = 2 * Math.min(Math.abs(qFish - fishTranslate(pNorm, pFocus, screenBoundary, d)), Math.abs(fishTranslate(pNorm, pFocus, screenBoundary, d) - qFish)); //unaugmented pNorm
-//		System.out.println(sGeom);
 		return sGeom;
-	}
-
-	@Override
-	public Model transform(Model model, View view) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

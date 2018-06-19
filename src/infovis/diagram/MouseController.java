@@ -357,9 +357,11 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
 				vert.setHeight(tempVert.getHeight());
 				vert.setWidth(tempVert.getWidth());
 				index++;
-			}
-			
-			model = fisheye.transform(model, view, x, y);
+            }
+            
+			fisheye.setMouseCoords(x, y, view);
+            
+            model = fisheye.transform(model, view);
     }
 
 }
