@@ -23,7 +23,17 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
     private double mouseOffsetY;
     private boolean edgeDrawMode = false;
     private DrawingEdge drawingEdge = null;
+    /**
+     * Homework 1.2
+     * Marker and Overview variables
+     */
+    private boolean isMarkerMoving = false;
+    /**
+     * Homework 4.2
+     * Fisheye variables
+     */
     private boolean fisheyeMode;
+    private Fisheye fisheye = new Fisheye();
     private GroupingRectangle groupRectangle;
     /*
      * Getter And Setter
@@ -50,10 +60,6 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int x = e.getX();
         int y = e.getY();
         double scale = view.getScale();
-
-
-        
-       moveSmallMarker(x,y, scale);
 
         if (e.getButton() == MouseEvent.BUTTON3){
             /*
@@ -91,6 +97,19 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int x = e.getX();
         int y = e.getY();
         double scale = view.getScale();
+        double test_x = view.getWidth() - (view.getWidth()*(1/scale));
+        double test_y = view.getHeight() - (view.getHeight()*(1/scale));
+        /*
+         * Homework 1.2
+         */
+        // if (scale > 1 && (view.overviewRectContains(x, y))) {
+        //     view.setTranslateX((x) * -1);
+        //     view.setTranslateY((y) * -1);
+        //     // moveSmallMarker(x,y, scale);
+        // }
+        if(scale > 1 && (view.overviewRectContains(x, y))) {
+            isMarkerMoving = true;
+        }
 
 
         if (edgeDrawMode){
@@ -101,10 +120,15 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
             /*
              * do handle interactions in fisheye mode
              */
+            /**
+             * Homework 4.2
+             * call function fisheyeInteractions
+             */
+            fisheyeInteractions(x, y);
             view.repaint();
         } else {
 
-            selectedElement = getElementContainingPosition(x/scale,y/scale);
+            selectedElement = getElementContainingPosition(x/scale, y/scale);
             /*
              * calculate offset
              */
@@ -116,6 +140,7 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
     public void mouseReleased(MouseEvent arg0){
         int x = arg0.getX();
         int y = arg0.getY();
+        isMarkerMoving = false;
 
         if (drawingEdge != null){
             Element to = getElementContainingPosition(x, y);
@@ -164,7 +189,9 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         }
         view.repaint();
         double scale = view.getScale();
-       moveSmallMarker(x,y, scale);
+    //    moveSmallMarker(x,y, scale);
+        //Reset All
+        resetAll();
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -176,17 +203,26 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         /*
          * Homework 1.2
          */
-        if (scale > 1 && view.markerContains((int)mouseOffsetX,(int)mouseOffsetY)) {
-            view.setTranslateX((x) * -1);
-            view.setTranslateY((y) * -1);
+        // if (scale > 1 && (view.overviewRectContains(x, y))) {
+        //     view.setTranslateX((x) * -1);
+        //     view.setTranslateY((y) * -1);
+        //     // moveSmallMarker(x,y, scale);
+        // }
+        if(isMarkerMoving && view.overviewRectContains(x,y)){
+            view.setTranslateX(x);
+            view.setTranslateY(y);
             moveSmallMarker(x,y, scale);
-
         }
 
         if (fisheyeMode){
             /*
              * handle fisheye mode interactions
              */
+            /**
+             * Homework 4.2
+             * Fisheye interactions
+             */
+            fisheyeInteractions(x, y);
             view.repaint();
         } else if (edgeDrawMode){
             drawingEdge.setX(e.getX());
@@ -254,33 +290,76 @@ public class MouseController implements MouseListener,MouseMotionListener,MouseW
         int moveY = y * 10;
 
         //Constraints
-        double parentsize_x = view.getWidth();
-        double parentsize_y = view.getHeight();
+        double parentsize_x = 1000;//view.getWidth();
+        double parentsize_y = 1000; //view.getHeight();
         double getMarkerXLimit = view.getMarker().getX();
         double getMarkerYLimit = view.getMarker().getY();
         //define limits
         double left = 0;
         double top = 0;
-        double right = 20;
+        double right = parentsize_x - view.getMarker().getWidth();
         double bottom = parentsize_y - view.getMarker().getHeight();
         boolean limitBox = (moveX >= left && moveX <= right) && (moveY >= top && moveY <= bottom);
-        boolean limitRightHeight = moveX >= 10 && (moveY >= top && moveY <= bottom);
+        boolean limitRightHeight = moveX >= right && (moveY >= top && moveY <= bottom);
         boolean limitBottomWidth = moveY >= bottom && (moveX >= left && moveX <= right);
         boolean limitLeftHeight = moveX <= left && (moveY >= top && moveY <= bottom);
         boolean limitTopWidth = moveY <= top && (moveX >= left && moveX <= right);
-        
+
         //Make sure it only moves within limits
         if(limitBox){//move freely if you're within ALL limits
             view.updateMarker(moveX, moveY);
+            Debug.print("limitBox: TRUE ");
         }else if(limitRightHeight){//if the limit is beyond the right side, stay on right and move within Y
             view.updateMarker((int) right, moveY);
+            Debug.print("limitRightHeight: TRUE ");
         }else if(limitBottomWidth){//if the limit is beyond the bottom, stay on bottom and move within X
             view.updateMarker(moveX, (int) bottom);
+            Debug.print("limitBottomWidth: TRUE ");
         }else if(limitLeftHeight){//if the limit is less than left side, stay on left then move within Y
             view.updateMarker((int) left, moveY);
+            Debug.print("limitLeftHeight: TRUE ");
         }else if(limitTopWidth){//if the limit is less than top side, stay on top then move within X
             view.updateMarker(moveX, (int) top);
+            Debug.print("limitTopWidth: TRUE ");
+        }else if(!limitBox){
+            view.updateMarker(0,0);
         }
+
+        Debug.println("Marker X = " + String.valueOf(view.getMarker().getX() + "  || Marker Y = " + String.valueOf(view.getMarker().getY())));
+        double resetX = view.getTranslateX();
+        double resetY = view.getTranslateY();
+        view.updateTempTrans(resetX,resetY);
         
+        // view.repaint();
     }
+
+    /**
+     * Homework 1.2
+     * Reset all the position for the marker
+     */
+    private void resetAll(){
+        
+        view.updateTranslation(view.getTempTransX(), view.getTempTransY());
+    }
+
+    /**
+     * Homework 4.2
+     * Fisheye interactions
+     */
+    private void fisheyeInteractions(int x, int y){
+        Model tmpModel = new Model();
+			tmpModel.generateTestValues();
+			int index = 0;
+			for (Vertex vert : model.getVertices()) {
+                Vertex tempVert = tmpModel.getVertices().get(index);
+				vert.setX(tempVert.getX());
+				vert.setY(tempVert.getY());
+				vert.setHeight(tempVert.getHeight());
+				vert.setWidth(tempVert.getWidth());
+				index++;
+			}
+			
+			model = fisheye.transform(model, view, x, y);
+    }
+
 }
